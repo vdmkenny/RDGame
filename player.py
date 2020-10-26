@@ -167,6 +167,8 @@ class PlayerCharacter(arcade.Sprite):
 
         frame = self.cur_texture // UPDATES_PER_FRAME
         self.texture = self.facingdict.get(self.character_face_direction)[frame]
+        #self.set_hit_box(self.texture.hit_box_points)
+        self.set_hit_box([[-16,-16], [16,-16], [16,-24], [-16,-24]])
 
         # Walking animation
         framecount = 4 * UPDATES_PER_FRAME - 1

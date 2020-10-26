@@ -78,7 +78,7 @@ class GameView(arcade.View):
 
         # Read in the tiled map
         overworld = arcade.tilemap.read_tmx(map_name)
-        ground_list = ["ground",]
+        ground_list = ["ground", "grass"]
         colission_list = ["farm", "water", "water_grass", "building"]
         top_list = ["farm_up", "building_up", "tree"]
 
