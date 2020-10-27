@@ -1,4 +1,5 @@
 import arcade
+
 import player
 
 SCREEN_WIDTH = 1024
@@ -47,7 +48,7 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        arcade.set_background_color(arcade.color.AMAZON)
+        arcade.set_background_color(arcade.color.BLACK)
         # Keep track of held keys
         self.key_up = False
         self.key_down = False
@@ -55,8 +56,8 @@ class GameView(arcade.View):
         self.key_right = False
 
         # viewport offset
-        self.view_left = 500
-        self.view_bottom = 700
+        self.view_left = 0
+        self.view_bottom = 0
 
         # Speed of the world moving around the player
         self.move_x = 0
@@ -65,7 +66,10 @@ class GameView(arcade.View):
         # Map Layers
         self.ground_layers = arcade.SpriteList()
         self.colission_layers = arcade.SpriteList()
+        self.bridge_layers = arcade.SpriteList()
         self.top_layers = arcade.SpriteList()
+        self.warp_layer = arcade.SpriteList()
+        self.spawn_layer = arcade.SpriteList()
 
         self.player = None
         self.physics_engine = None
@@ -79,7 +83,8 @@ class GameView(arcade.View):
         # Read in the tiled map
         overworld = arcade.tilemap.read_tmx(map_name)
         ground_list = ["ground", "grass"]
-        colission_list = ["farm", "water", "water_grass", "building"]
+        colission_list = ["farm", "water", "building"]
+        bridge_list = ["water_grass"]
         top_list = ["farm_up", "building_up", "tree"]
 
         for layer in ground_list:
@@ -92,10 +97,31 @@ class GameView(arcade.View):
                                                       layer_name=layer,
                                                       scaling=TILE_SCALING,
                                                       use_spatial_hash=True))
+        for layer in bridge_list:
+            self.bridge_layers.extend(arcade.tilemap.process_layer(map_object=overworld,
+                                                      layer_name=layer,
+                                                      scaling=TILE_SCALING))
         for layer in top_list:
             self.top_layers.extend(arcade.tilemap.process_layer(map_object=overworld,
                                                       layer_name=layer,
                                                       scaling=TILE_SCALING))
+
+        self.warp_layer.extend(arcade.tilemap.process_layer(map_object=overworld,
+                                                  layer_name="warp",
+                                                  scaling=TILE_SCALING))
+
+        self.spawn_layer.extend(arcade.tilemap.process_layer(map_object=overworld,
+                                                  layer_name="spawn",
+                                                  scaling=TILE_SCALING))
+
+        for warp in self.warp_layer:
+            print(warp.properties)
+
+        for warp in self.spawn_layer:
+            print(warp.center_x)
+            # viewport offset
+            self.view_left = warp.center_x - SCREEN_WIDTH//2
+            self.view_bottom = warp.center_y - SCREEN_HEIGHT//2
 
         arcade.set_viewport(self.view_left,
                             SCREEN_WIDTH + self.view_left - 1,
@@ -163,6 +189,7 @@ class GameView(arcade.View):
 
         self.ground_layers.draw()
         self.colission_layers.draw()
+        self.bridge_layers.draw()
         self.player.draw()
         self.top_layers.draw()
 
