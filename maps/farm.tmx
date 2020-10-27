@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="8">
+ <tileset firstgid="1" source="../pipoya/SampleMap/[A]Grass_pipo.tsx"/>
+ <tileset firstgid="529" source="../pipoya/SampleMap/[Base]BaseChip_pipo.tsx"/>
+ <layer id="1" name="ground" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo4B8YMhMGh41b9Q8apqHzw5qAWqbN5wAAAz8FFE=
+  </data>
+ </layer>
+ <layer id="5" name="building" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgF1AL1zORhfOZVkYjpbR4IcLEyMDSwQtg8QJqbFaHmCQsE1wPF6liJM49Y0ECCefeAbnjAgqkmixWVT4x5T4HmPAPiFywQNj5ArPtg5iGDbKjbeoF0Hytp7nsHxB9wuG8q0KxpJJhHCqC3efjyE6n5rRJHHoABbHLVZPhpOAEAjXY7Nw==
+  </data>
+ </layer>
+ <layer id="4" name="building_up" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFgxmksBBmY+PjAjks+Nl3WCA4h0jzaAm+sFLPrFNAs/5Q0TwQeIrDvFageBuJdj2nsttGwSigBwAAKSUK1Q==
+  </data>
+ </layer>
+ <objectgroup id="3" name="spawn" opacity="0.45">
+  <object id="1" gid="1558" x="305.709" y="524.34" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="6" name="warp" opacity="0.51">
+  <object id="7" name="warp_overworld" gid="1556" x="288" y="579" width="63" height="35">
+   <properties>
+    <property name="basepath" value="pipoya/SampleMap/"/>
+    <property name="mapname" value="samplemap"/>
+    <property name="warp_x" value="436"/>
+    <property name="warp_y" value="1600"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

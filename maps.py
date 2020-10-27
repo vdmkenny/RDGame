@@ -5,7 +5,7 @@ TILE_SCALING=1
 
 class GameMap():
 
-    def __init__(self, mapname, basepath="maps/"):
+    def __init__(self, mapname, basepath="maps/", custom_spawn=None):
         self.ground_layers = arcade.SpriteList()
         self.collision_layers = arcade.SpriteList()
         self.bridge_layers = arcade.SpriteList()
@@ -49,7 +49,10 @@ class GameMap():
                                                   layer_name="spawn",
                                                   scaling=TILE_SCALING))
 
-        self.spawnpoint = [self.spawn_layer[0].center_x, self.spawn_layer[0].center_y]
+        if custom_spawn:
+            self.spawnpoint = custom_spawn
+        else:
+            self.spawnpoint = [self.spawn_layer[0].center_x, self.spawn_layer[0].center_y]
 
         self.map_dict.update({'ground_layers': 	self.ground_layers,
 			'collision_layers': 	self.collision_layers,
@@ -61,12 +64,15 @@ class GameMap():
 
     def LoadMap(self, game):
 
-        game.view_left   = self.spawnpoint[0] - game.SCREEN_WIDTH//2
-        game.view_bottom = self.spawnpoint[1] - game.SCREEN_HEIGHT//2
+        game.view_left   = self.spawnpoint[0] - game.SCREEN_WIDTH / 2
+        game.view_bottom = self.spawnpoint[1] - game.SCREEN_HEIGHT / 2
 
         arcade.set_viewport(game.view_left,
                             game.SCREEN_WIDTH + game.view_left - 1,
                             game.view_bottom,
                             game.SCREEN_HEIGHT + game.view_bottom - 1)
+
+        game.player.center_x = game.SCREEN_WIDTH / 2 + game.view_left
+        game.player.center_y = game.SCREEN_HEIGHT / 2 + game.view_bottom
         
-        return arcade.PhysicsEngineSimple(game.player, self.collision_layers)
+        game.physics_engine = arcade.PhysicsEngineSimple(game.player, self.collision_layers)

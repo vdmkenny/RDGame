@@ -1,6 +1,6 @@
 import arcade
 
-import player, maps
+import player, maps, warp
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
@@ -82,7 +82,7 @@ class GameView(arcade.View):
                                             self.view_bottom)
 
         self.activemap = maps.GameMap(mapname=self.default_map, basepath=self.default_map_dir)
-        self.physics_engine = self.activemap.LoadMap(self)
+        self.activemap.LoadMap(self)
 
 
     # Check if any arrow key is currently held down
@@ -146,6 +146,7 @@ class GameView(arcade.View):
         self.activemap.map_dict.get("bridge_layers").draw()
         self.player.draw()
         self.activemap.map_dict.get("top_layers").draw()
+        #self.activemap.map_dict.get("warp_layer").draw()
 
 
     def update(self, delta_time):
@@ -153,11 +154,20 @@ class GameView(arcade.View):
         self.player.update()
         self.player.update_animation()
 
-        # Center character
         if self.player.player_moving:
             self.player.center_x -= self.move_x
             self.player.center_y -= self.move_y
 
+        if self.player.collides_with_list(self.activemap.map_dict.get("warp_layer")):    
+            print("it's warpin time")
+            warps = self.player.collides_with_list(self.activemap.map_dict.get("warp_layer"))
+            warp.doWarp(self,
+                        warps[0].properties.get('mapname'),
+                        warps[0].properties.get('basepath', None),
+                        warps[0].properties.get('warp_x', 0),
+                        warps[0].properties.get('warp_y', 0))
+            return
+        
         if self.player.collides_with_list(self.activemap.map_dict.get("collision_layers")):
             self.physics_engine.update()
             self.player.center_x = SCREEN_WIDTH / 2 + self.view_left
