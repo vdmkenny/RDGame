@@ -1,6 +1,6 @@
 import arcade
 
-import player
+import player, maps
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
@@ -63,72 +63,33 @@ class GameView(arcade.View):
         self.move_x = 0
         self.move_y = 0
 
-        # Map Layers
-        self.ground_layers = arcade.SpriteList()
-        self.colission_layers = arcade.SpriteList()
-        self.bridge_layers = arcade.SpriteList()
-        self.top_layers = arcade.SpriteList()
-        self.warp_layer = arcade.SpriteList()
-        self.spawn_layer = arcade.SpriteList()
-
         self.player = None
         self.physics_engine = None
 
+        self.default_map_dir = "pipoya/SampleMap/"
+        self.default_map = "samplemap"
+
+        self.active_map = None
+
+        self.SCREEN_WIDTH = SCREEN_WIDTH
+        self.SCREEN_HEIGHT = SCREEN_HEIGHT
+
 
     def setup(self):
-        self.player = player.PlayerCharacter(SCREEN_WIDTH, SCREEN_HEIGHT, self.view_left, self.view_bottom)
-        # Name of map file to load
-        map_name = "pipoya/SampleMap/samplemap.tmx"
+        self.player = player.PlayerCharacter(SCREEN_WIDTH,
+                                            SCREEN_HEIGHT, 
+                                            self.view_left, 
+                                            self.view_bottom)
 
-        # Read in the tiled map
-        overworld = arcade.tilemap.read_tmx(map_name)
-        ground_list = ["ground", "grass"]
-        colission_list = ["farm", "water", "building"]
-        bridge_list = ["water_grass"]
-        top_list = ["farm_up", "building_up", "tree"]
-
-        for layer in ground_list:
-            self.ground_layers.extend(arcade.tilemap.process_layer(map_object=overworld,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING))
-
-        for layer in colission_list:
-            self.colission_layers.extend(arcade.tilemap.process_layer(map_object=overworld,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING,
-                                                      use_spatial_hash=True))
-        for layer in bridge_list:
-            self.bridge_layers.extend(arcade.tilemap.process_layer(map_object=overworld,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING))
-        for layer in top_list:
-            self.top_layers.extend(arcade.tilemap.process_layer(map_object=overworld,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING))
-
-        self.warp_layer.extend(arcade.tilemap.process_layer(map_object=overworld,
-                                                  layer_name="warp",
-                                                  scaling=TILE_SCALING))
-
-        self.spawn_layer.extend(arcade.tilemap.process_layer(map_object=overworld,
-                                                  layer_name="spawn",
-                                                  scaling=TILE_SCALING))
-
-        for warp in self.warp_layer:
-            print(warp.properties)
-
-        for warp in self.spawn_layer:
-            print(warp.center_x)
-            # viewport offset
-            self.view_left = warp.center_x - SCREEN_WIDTH//2
-            self.view_bottom = warp.center_y - SCREEN_HEIGHT//2
+        self.activemap = maps.GameMap(mapname=self.default_map, basepath=self.default_map_dir)
+        self.activemap.LoadMap(self)
 
         arcade.set_viewport(self.view_left,
                             SCREEN_WIDTH + self.view_left - 1,
                             self.view_bottom,
                             SCREEN_HEIGHT + self.view_bottom - 1)
         
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.colission_layers)
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_layers)
 
 
     # Check if any arrow key is currently held down
@@ -188,7 +149,7 @@ class GameView(arcade.View):
         arcade.start_render()
 
         self.ground_layers.draw()
-        self.colission_layers.draw()
+        self.collision_layers.draw()
         self.bridge_layers.draw()
         self.player.draw()
         self.top_layers.draw()
@@ -203,7 +164,7 @@ class GameView(arcade.View):
             self.player.center_x -= self.move_x
             self.player.center_y -= self.move_y
 
-        if self.player.collides_with_list(self.colission_layers):
+        if self.player.collides_with_list(self.collision_layers):
             self.physics_engine.update()
             self.player.center_x = SCREEN_WIDTH / 2 + self.view_left
             self.player.center_y = SCREEN_HEIGHT / 2 + self.view_bottom
