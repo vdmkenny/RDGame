@@ -49,17 +49,20 @@ class GameMap():
                                                   layer_name="spawn",
                                                   scaling=TILE_SCALING))
 
-        spawnpoint = [self.spawn_layer[0].center_x, self.spawn_layer[0].center_y]
+        self.spawnpoint = [self.spawn_layer[0].center_x, self.spawn_layer[0].center_y]
 
         self.map_dict.update({'ground_layers': 	self.ground_layers,
 			'collision_layers': 	self.collision_layers,
 			'bridge_layers': 	self.bridge_layers,
 			'top_layers': 		self.top_layers,
 			'warp_layer': 		self.warp_layer,
-			'spawn':		spawnpoint,
+			'spawn':		self.spawnpoint,
 			})
 
     def LoadMap(self, game):
+
+        game.view_left   = self.spawnpoint[0] - game.SCREEN_WIDTH//2
+        game.view_bottom = self.spawnpoint[1] - game.SCREEN_HEIGHT//2
 
         arcade.set_viewport(game.view_left,
                             game.SCREEN_WIDTH + game.view_left - 1,
