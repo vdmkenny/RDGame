@@ -82,14 +82,7 @@ class GameView(arcade.View):
                                             self.view_bottom)
 
         self.activemap = maps.GameMap(mapname=self.default_map, basepath=self.default_map_dir)
-        self.activemap.LoadMap(self)
-
-        arcade.set_viewport(self.view_left,
-                            SCREEN_WIDTH + self.view_left - 1,
-                            self.view_bottom,
-                            SCREEN_HEIGHT + self.view_bottom - 1)
-        
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.collision_layers)
+        self.physics_engine = self.activemap.LoadMap(self)
 
 
     # Check if any arrow key is currently held down
@@ -148,11 +141,12 @@ class GameView(arcade.View):
     def on_draw(self):
         arcade.start_render()
 
-        self.ground_layers.draw()
-        self.collision_layers.draw()
-        self.bridge_layers.draw()
+        self.activemap.map_dict.get("ground_layers").draw()
+        self.activemap.map_dict.get("collision_layers").draw()
+        self.activemap.map_dict.get("bridge_layers").draw()
         self.player.draw()
-        self.top_layers.draw()
+        self.activemap.map_dict.get("top_layers").draw()
+
 
     def update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
@@ -164,7 +158,7 @@ class GameView(arcade.View):
             self.player.center_x -= self.move_x
             self.player.center_y -= self.move_y
 
-        if self.player.collides_with_list(self.collision_layers):
+        if self.player.collides_with_list(self.activemap.map_dict.get("collision_layers")):
             self.physics_engine.update()
             self.player.center_x = SCREEN_WIDTH / 2 + self.view_left
             self.player.center_y = SCREEN_HEIGHT / 2 + self.view_bottom
