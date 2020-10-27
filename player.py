@@ -169,10 +169,10 @@ class PlayerCharacter(arcade.Sprite):
         self.texture = self.facingdict.get(self.character_face_direction)[frame]
         #self.set_hit_box(self.texture.hit_box_points)
         self.set_hit_box([
-                         [-(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION // 2)],
-                         [(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION // 2)], 
-                         [(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION)], 
-                         [-(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION)]
+                         [-(CHARACTER_RESOLUTION // 2 -4),-(CHARACTER_RESOLUTION // 2)],
+                         [(CHARACTER_RESOLUTION // 2  -4),-(CHARACTER_RESOLUTION // 2)], 
+                         [(CHARACTER_RESOLUTION // 2  -4),-(CHARACTER_RESOLUTION)], 
+                         [-(CHARACTER_RESOLUTION // 2 -4),-(CHARACTER_RESOLUTION)]
                          ])
 
         # Walking animation
