@@ -1,7 +1,20 @@
 import arcade
 
+import character
+
 TILE_SCALING=1
 
+def create_npc_layer(npc_layer):
+    npc_rendered = arcade.SpriteList()
+    for npc in npc_layer:
+        character_sprite = int(npc.properties.get('sprite'))
+        npc_character = character.GameCharacter(character_sprite)
+        npc_character.properties = npc.properties
+        npc_character.center_x = npc.center_x
+        npc_character.center_y = npc.center_y
+        npc_rendered.append(npc_character)
+
+    return npc_rendered
 
 class GameMap():
 
@@ -13,6 +26,8 @@ class GameMap():
         self.warp_layer = arcade.SpriteList()
         self.spawn_layer = arcade.SpriteList()
         self.npc_layer = arcade.SpriteList()
+        npc_rendered = arcade.SpriteList()
+        self.message_layer = arcade.SpriteList()
 
         self.map_dict = {}
 
@@ -51,6 +66,14 @@ class GameMap():
                                                   scaling=TILE_SCALING))
         self.npc_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
                                                   layer_name="npc",
+                                                  scaling=TILE_SCALING,
+                                                  use_spatial_hash=True))
+
+        ncp_rendered = create_npc_layer(npc_layer=self.npc_layer)
+
+
+        self.message_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
+                                                  layer_name="message",
                                                   scaling=TILE_SCALING))
 
         if custom_spawn:
@@ -63,7 +86,8 @@ class GameMap():
 			'bridge_layers': 	self.bridge_layers,
 			'top_layers': 		self.top_layers,
 			'warp_layer': 		self.warp_layer,
-			'npc_layer': 		self.npc_layer,
+			'npc_layer': 		create_npc_layer(npc_layer=self.npc_layer),
+			'message_layer':	self.message_layer,
 			'spawn':		self.spawnpoint,
 			})
 
@@ -81,3 +105,7 @@ class GameMap():
         game.player.center_y = game.SCREEN_HEIGHT / 2 + game.view_bottom
         
         game.physics_engine = arcade.PhysicsEngineSimple(game.player, self.collision_layers)
+
+        game.active_characters = self.map_dict.get("npc_layer")
+        game.active_characters.append(game.player)
+

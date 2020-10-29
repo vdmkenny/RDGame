@@ -31,9 +31,9 @@
   </object>
  </objectgroup>
  <objectgroup id="7" name="npc">
-  <object id="11" name="shopkeeper" gid="1558" x="208" y="290" width="32" height="32">
+  <object id="11" name="shopkeeper" gid="1558" x="208" y="289" width="32" height="64">
    <properties>
-    <property name="name" value="Goro"/>
+    <property name="display_name" value="Goro the Blacksmith"/>
     <property name="sprite" value="1"/>
     <property name="text" value="I'm the weapons shop keeper!"/>
     <property name="type" value="npc"/>

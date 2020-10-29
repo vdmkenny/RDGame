@@ -1,7 +1,7 @@
 import arcade
 
 TEXT_PADDING = 10
-FONT_SIZE = 14
+FONT_SIZE = 18
 
 class DialogMessage():
     def __init__(self, game, message=["test!"], name=None, coords=[0,0], size=[100,100]):
@@ -26,6 +26,8 @@ class DialogMessage():
         self.index=0
         if name:
             self.name = name
+        else:
+            self.name = None
         self.full_message = message
         self.current_message = self.full_message[self.index]
         self.active=True
@@ -44,17 +46,22 @@ class DialogMessage():
 
     def draw(self):
         if self.active:
-            arcade.draw_rectangle_filled(self.coords[0] + self.offset_x,
+            arcade.draw_xywh_rectangle_outline(self.coords[0] + self.offset_x,
                                          self.coords[1] + self.offset_y,
                                          self.size[0],
                                          self.size[1],
-                                         [0, 0, 0, 128])
+                                         [128, 128, 128, 128], 5)
+            arcade.draw_xywh_rectangle_filled(self.coords[0] + self.offset_x,
+                                         self.coords[1] + self.offset_y,
+                                         self.size[0],
+                                         self.size[1],
+                                         [0, 0, 64, 128])
 
-            name_start    = [self.coords[0] + self.offset_x, 
-                             self.coords[1] + self.offset_y]
+            name_start    = [self.coords[0] + self.offset_x + TEXT_PADDING, 
+                             self.coords[1] + self.offset_y + self.size[1] - FONT_SIZE - (TEXT_PADDING*2) ]
 
-            message_start = [self.coords[0] + self.offset_x, 
-                             self.coords[1] + self.offset_y - FONT_SIZE - 5] 
+            message_start = [self.coords[0] + self.offset_x + TEXT_PADDING, 
+                             self.coords[1] + self.offset_y + self.size[1] - (FONT_SIZE * 2) - (TEXT_PADDING*4)] 
 
             if self.name:
                 arcade.draw_text(f'{self.name}:', 

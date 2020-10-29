@@ -10,7 +10,6 @@ def doWarp(game, mapname, basepath=None, warp_x=None, warp_y=None):
     else:
         custom_spawn = None
 
-    print(custom_spawn)
     next_map = maps.GameMap(mapname=mapname, basepath=basepath, custom_spawn=custom_spawn)
     next_map.LoadMap(game)
     game.activemap = next_map

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="17" nextobjectid="24">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="60" height="60" tilewidth="32" tileheight="32" infinite="0" nextlayerid="18" nextobjectid="32">
  <tileset firstgid="1" source="[A]WaterFall_pipo.tsx"/>
  <tileset firstgid="577" name="[Base]BaseChip_pipo" tilewidth="32" tileheight="32" tilecount="1064" columns="8">
   <image source="[Base]BaseChip_pipo.png" width="256" height="4256"/>
@@ -601,9 +601,48 @@
   </object>
  </objectgroup>
  <objectgroup id="16" name="npc" opacity="0.32">
+  <object id="28" name="villager" gid="1606" x="333.333" y="360.667" width="32" height="64">
+   <properties>
+    <property name="display_name" value="Villager"/>
+    <property name="sprite" value="0"/>
+    <property name="text" value="Oh, hi!"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+  <object id="30" name="villager" gid="1606" x="1046.67" y="969.333" width="32" height="64">
+   <properties>
+    <property name="display_name" value="Villager"/>
+    <property name="sprite" value="1"/>
+    <property name="text" value="Oh, hi!"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+  <object id="31" name="villager" gid="1606" x="1346.67" y="834" width="32" height="64">
+   <properties>
+    <property name="display_name" value="Villager"/>
+    <property name="sprite" value="2"/>
+    <property name="text" value="Oh, hi!"/>
+    <property name="type" value="npc"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="17" name="message" opacity="0.25">
   <object id="23" name="Notice Board" gid="870" x="350.333" y="864" width="66.9997" height="63.3337">
    <properties>
-    <property name="text" value="This is a funny mopje haha"/>
+    <property name="display_name" value="Noticeboard"/>
+    <property name="text" value="Please visit Goro's blacksmith!"/>
+    <property name="type" value="notice"/>
+   </properties>
+  </object>
+  <object id="24" name="Angel" gid="870" x="477" y="896" width="40.333" height="63.3337">
+   <properties>
+    <property name="text" value="It's an odd angelic statue."/>
+    <property name="type" value="notice"/>
+   </properties>
+  </object>
+  <object id="25" name="Sign" gid="870" x="831.666" y="932" width="36.333" height="64.667">
+   <properties>
+    <property name="text" value="West: Yuri's Farm       East: Unnamed Town"/>
     <property name="type" value="notice"/>
    </properties>
   </object>

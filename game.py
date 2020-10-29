@@ -1,4 +1,5 @@
 import arcade
+from OpenGL import GL as gl
 
 import character, maps, warp, dialog
 
@@ -70,21 +71,20 @@ class GameView(arcade.View):
         self.default_map_dir = "pipoya/SampleMap/"
         self.default_map = "samplemap"
 
-        self.active_map = None
+        self.activemap = None
+        self.active_characters = arcade.SpriteList()
 
         self.SCREEN_WIDTH = SCREEN_WIDTH
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
 
+
         self.dialog = dialog.DialogMessage(game=self, 
-                                        coords=[DIALOG_PADDING, 100],
+                                        coords=[DIALOG_PADDING, DIALOG_PADDING],
                                         size  =[SCREEN_WIDTH - (DIALOG_PADDING*2), 200])
 
 
     def setup(self):
-        self.player = character.GameCharacter(SCREEN_WIDTH,
-                                            SCREEN_HEIGHT, 
-                                            self.view_left, 
-                                            self.view_bottom)
+        self.player = character.GameCharacter(2)
 
         self.activemap = maps.GameMap(mapname=self.default_map, basepath=self.default_map_dir)
         self.activemap.LoadMap(self)
@@ -158,7 +158,10 @@ class GameView(arcade.View):
         self.activemap.map_dict.get("ground_layers").draw()
         self.activemap.map_dict.get("collision_layers").draw()
         self.activemap.map_dict.get("bridge_layers").draw()
-        self.player.draw()
+        #self.player.draw()
+
+        self.active_characters.draw(filter=gl.GL_NEAREST)
+
         self.activemap.map_dict.get("top_layers").draw()
 
         self.dialog.draw()
@@ -168,8 +171,13 @@ class GameView(arcade.View):
 
     def update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
-        self.player.update()
-        self.player.update_animation()
+#        self.player.update()
+#        self.player.update_animation()
+
+        character.sort_spritelist(self.active_characters, key=lambda x: x.center_y)
+        self.active_characters.update()
+        self.active_characters.update_animation()
+
 
         self.dialog.update(self)
 
@@ -184,6 +192,12 @@ class GameView(arcade.View):
                         warps[0].properties.get('basepath', None),
                         warps[0].properties.get('warp_x', 0),
                         warps[0].properties.get('warp_y', 0))
+            return
+
+        if self.player.collides_with_list(self.activemap.map_dict.get("npc_layer")):
+            self.physics_engine.update()
+            self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
+            self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
             return
         
         if self.player.collides_with_list(self.activemap.map_dict.get("collision_layers")):

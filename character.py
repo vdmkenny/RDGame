@@ -14,6 +14,36 @@ RIGHT_FACING = 3
 #Character constants
 NERD = 0
 OLD_MAN = 1
+YOUNG_GIRL = 2
+
+def get_y_value(npc):
+    return npc.center_y
+
+def order_npc(npc_list):
+    if len(npc_list) <=1:
+        return npc_list
+
+    ordered_spritelist = arcade.SpriteList(use_spatial_hash=False)
+
+    ordered_list = []
+
+    for npc in npc_list:
+        ordered_list.append(npc)
+    print(len(ordered_list))
+
+    ordered_list.sort(key=get_y_value)
+
+    for npc in ordered_list:
+        ordered_spritelist.append(npc)
+
+    return ordered_spritelist
+
+def sort_spritelist(sprite_list, key=None):
+    sprite_list.sprite_list = sorted(sprite_list.sprite_list, key=key, reverse=True)
+    for idx, sprite in enumerate(sprite_list.sprite_list):
+        sprite_list.sprite_idx[sprite] = idx
+    sprite_list._vao1 = None
+
 
 def load_character_textures(filename, character, facing):
     if facing == DOWN_FACING:
@@ -117,21 +147,17 @@ def load_character_textures(filename, character, facing):
 
 
 class GameCharacter(arcade.Sprite):
-    def __init__(self, width, height, view_left, view_bottom):
+    def __init__(self, character):
 
         # Set up parent class
         super().__init__()
-
-        # Center character
-        self.center_x = width / 2 + view_left
-        self.center_y = height / 2 + view_bottom
 
         # Default to face-down
         self.character_face_direction = DOWN_FACING
         self.character_moving = False
 
         # Select character model
-        self.character = NERD
+        self.character = character
 
         # Used for flipping between image sequences
         self.cur_texture = 1
@@ -210,7 +236,10 @@ class GameCharacter(arcade.Sprite):
         self.cur_texture += 1
 
     def interact(self, game):
-        interactions = self.action_sprite.collides_with_list(game.activemap.map_dict.get("npc_layer"))    
+#        interactions = self.action_sprite.collides_with_list(game.activemap.map_dict.get("npc_layer"))    
+        interactions = self.action_sprite.collides_with_list(game.active_characters)    
+        interactions += self.action_sprite.collides_with_list(game.activemap.map_dict.get("message_layer"))
         if interactions:
-            game.dialog.setMessage(name=interactions[0].properties.get('name', None),
-                                   message=[interactions[0].properties.get('text', "")])
+            game.dialog.setMessage(name=interactions[0].properties.get('display_name', None),
+                                   message=[interactions[0].properties.get('text', "")
+                                       ])
