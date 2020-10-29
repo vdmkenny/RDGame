@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="8">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="13">
  <tileset firstgid="1" source="../pipoya/SampleMap/[A]Grass_pipo.tsx"/>
  <tileset firstgid="529" source="../pipoya/SampleMap/[Base]BaseChip_pipo.tsx"/>
  <layer id="1" name="ground" width="20" height="20">
@@ -27,6 +27,16 @@
     <property name="mapname" value="samplemap"/>
     <property name="warp_x" value="976.00"/>
     <property name="warp_y" value="1100"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="7" name="npc">
+  <object id="11" name="shopkeeper" gid="1558" x="208" y="290" width="32" height="32">
+   <properties>
+    <property name="name" value="Goro"/>
+    <property name="sprite" value="1"/>
+    <property name="text" value="I'm the weapons shop keeper!"/>
+    <property name="type" value="npc"/>
    </properties>
   </object>
  </objectgroup>

@@ -116,7 +116,7 @@ def load_character_textures(filename, character, facing):
         ]
 
 
-class PlayerCharacter(arcade.Sprite):
+class GameCharacter(arcade.Sprite):
     def __init__(self, width, height, view_left, view_bottom):
 
         # Set up parent class
@@ -128,7 +128,7 @@ class PlayerCharacter(arcade.Sprite):
 
         # Default to face-down
         self.character_face_direction = DOWN_FACING
-        self.player_moving = False
+        self.character_moving = False
 
         # Select character model
         self.character = NERD
@@ -159,14 +159,6 @@ class PlayerCharacter(arcade.Sprite):
         # Default texture
         self.texture = self.textures_down[0]
 
-    def update_animation(self, delta_time: float = 1/60):
-        # Idle animation
-        if not self.player_moving:
-            self.texture = self.facingdict.get(self.character_face_direction)[0]
-            return
-
-        frame = self.cur_texture // UPDATES_PER_FRAME
-        self.texture = self.facingdict.get(self.character_face_direction)[frame]
         #self.set_hit_box(self.texture.hit_box_points)
         self.set_hit_box([
                          [-(CHARACTER_RESOLUTION // 2 -4),-(CHARACTER_RESOLUTION // 2)],
@@ -175,9 +167,50 @@ class PlayerCharacter(arcade.Sprite):
                          [-(CHARACTER_RESOLUTION // 2 -4),-(CHARACTER_RESOLUTION)]
                          ])
 
+        # Action Sprite is used for interactions with the world
+        self.action_sprite = arcade.Sprite(image_width=CHARACTER_RESOLUTION,
+                                           image_height=CHARACTER_RESOLUTION)
+
+        self.action_sprite.alpha = 128
+        self.action_sprite.color = arcade.color.RED
+        self.action_sprite.scale = CHARACTER_SCALING
+        self.action_sprite.texture   = load_character_textures(f"{MAIN_PATH}/spritemap.png", self.character, DOWN_FACING)[0]
+        self.action_sprite.set_hit_box([
+                         [-(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION // 2)],
+                         [(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION // 2)], 
+                         [(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION)], 
+                         [-(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION)]
+                         ])
+
+
+    def update_animation(self, delta_time: float = 1/60):
+        # Position action sprite
+        self.switch_action = {
+            DOWN_FACING:  [self.left, self.bottom - CHARACTER_RESOLUTION],
+            UP_FACING:    [self.left, self.bottom + CHARACTER_RESOLUTION],
+            LEFT_FACING:  [self.left - CHARACTER_RESOLUTION, self.bottom],
+            RIGHT_FACING: [self.left + CHARACTER_RESOLUTION, self.bottom],
+        }
+        self.action_sprite.left   = self.switch_action.get(self.character_face_direction)[0]
+        self.action_sprite.bottom = self.switch_action.get(self.character_face_direction)[1]
+
+        # Idle animation
+        if not self.character_moving:
+            self.texture = self.facingdict.get(self.character_face_direction)[0]
+            return
+
+        frame = self.cur_texture // UPDATES_PER_FRAME
+        self.texture = self.facingdict.get(self.character_face_direction)[frame]
+
         # Walking animation
         framecount = 4 * UPDATES_PER_FRAME - 1
         if self.cur_texture >= framecount:
             self.cur_texture = 0
 
         self.cur_texture += 1
+
+    def interact(self, game):
+        interactions = self.action_sprite.collides_with_list(game.activemap.map_dict.get("npc_layer"))    
+        if interactions:
+            game.dialog.setMessage(name=interactions[0].properties.get('name', None),
+                                   message=[interactions[0].properties.get('text', "")])

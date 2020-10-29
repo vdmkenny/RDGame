@@ -12,6 +12,7 @@ class GameMap():
         self.top_layers = arcade.SpriteList()
         self.warp_layer = arcade.SpriteList()
         self.spawn_layer = arcade.SpriteList()
+        self.npc_layer = arcade.SpriteList()
 
         self.map_dict = {}
 
@@ -48,6 +49,9 @@ class GameMap():
         self.spawn_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
                                                   layer_name="spawn",
                                                   scaling=TILE_SCALING))
+        self.npc_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
+                                                  layer_name="npc",
+                                                  scaling=TILE_SCALING))
 
         if custom_spawn:
             self.spawnpoint = custom_spawn
@@ -59,6 +63,7 @@ class GameMap():
 			'bridge_layers': 	self.bridge_layers,
 			'top_layers': 		self.top_layers,
 			'warp_layer': 		self.warp_layer,
+			'npc_layer': 		self.npc_layer,
 			'spawn':		self.spawnpoint,
 			})
 

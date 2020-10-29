@@ -1,14 +1,15 @@
 import arcade
 
-import player, maps, warp
+import character, maps, warp, dialog
 
 SCREEN_WIDTH = 1024
 SCREEN_HEIGHT = 768
 SCREEN_TITLE = "R&D Game"
 
 TILE_SCALING = 1
-
 MOVEMENT_SPEED = 4
+
+DIALOG_PADDING = 10
 
 #Facing constants
 DOWN_FACING = 0
@@ -74,9 +75,13 @@ class GameView(arcade.View):
         self.SCREEN_WIDTH = SCREEN_WIDTH
         self.SCREEN_HEIGHT = SCREEN_HEIGHT
 
+        self.dialog = dialog.DialogMessage(game=self, 
+                                        coords=[DIALOG_PADDING, 100],
+                                        size  =[SCREEN_WIDTH - (DIALOG_PADDING*2), 200])
+
 
     def setup(self):
-        self.player = player.PlayerCharacter(SCREEN_WIDTH,
+        self.player = character.GameCharacter(SCREEN_WIDTH,
                                             SCREEN_HEIGHT, 
                                             self.view_left, 
                                             self.view_bottom)
@@ -91,27 +96,36 @@ class GameView(arcade.View):
 
 
     def on_key_press(self, key, modifiers):
+        if key == arcade.key.SPACE:
+            if self.dialog.active:
+                self.dialog.nextMessage()
+                return
+            self.player.interact(self)
+
+        if self.dialog.active:
+            return
+
         if key == arcade.key.UP:
             self.key_up = True
-            self.player.player_moving = True
+            self.player.character_moving = True
             self.player.character_face_direction = UP_FACING
             self.move_y=-MOVEMENT_SPEED
             self.move_x=0
         elif key == arcade.key.DOWN:
             self.key_down = True
-            self.player.player_moving = True
+            self.player.character_moving = True
             self.player.character_face_direction = DOWN_FACING
             self.move_y=MOVEMENT_SPEED
             self.move_x=0
         elif key == arcade.key.LEFT:
             self.key_left = True
-            self.player.player_moving = True
+            self.player.character_moving = True
             self.player.character_face_direction = LEFT_FACING
             self.move_x=MOVEMENT_SPEED
             self.move_y=0
         elif key == arcade.key.RIGHT:
             self.key_right = True
-            self.player.player_moving = True
+            self.player.character_moving = True
             self.player.character_face_direction = RIGHT_FACING
             self.move_x=-MOVEMENT_SPEED
             self.move_y=0
@@ -121,22 +135,22 @@ class GameView(arcade.View):
             self.key_up = False
             self.move_y=0
             if not self.iskeyheld():
-                self.player.player_moving = False
+                self.player.character_moving = False
         elif key == arcade.key.DOWN:
             self.move_y=0
             self.key_down = False
             if not self.iskeyheld():
-                self.player.player_moving = False
+                self.player.character_moving = False
         elif key == arcade.key.LEFT:
             self.move_x=0
             self.key_left = False
             if not self.iskeyheld():
-                self.player.player_moving = False
+                self.player.character_moving = False
         elif key == arcade.key.RIGHT:
             self.move_x=0
             self.key_right = False
             if not self.iskeyheld():
-                self.player.player_moving = False
+                self.player.character_moving = False
 
     def on_draw(self):
         arcade.start_render()
@@ -146,7 +160,10 @@ class GameView(arcade.View):
         self.activemap.map_dict.get("bridge_layers").draw()
         self.player.draw()
         self.activemap.map_dict.get("top_layers").draw()
-        #self.activemap.map_dict.get("warp_layer").draw()
+
+        self.dialog.draw()
+
+        #self.player.action_sprite.draw()
 
 
     def update(self, delta_time):
@@ -154,12 +171,13 @@ class GameView(arcade.View):
         self.player.update()
         self.player.update_animation()
 
-        if self.player.player_moving:
+        self.dialog.update(self)
+
+        if self.player.character_moving:
             self.player.center_x -= self.move_x
             self.player.center_y -= self.move_y
 
         if self.player.collides_with_list(self.activemap.map_dict.get("warp_layer")):    
-            print("it's warpin time")
             warps = self.player.collides_with_list(self.activemap.map_dict.get("warp_layer"))
             warp.doWarp(self,
                         warps[0].properties.get('mapname'),
@@ -170,8 +188,8 @@ class GameView(arcade.View):
         
         if self.player.collides_with_list(self.activemap.map_dict.get("collision_layers")):
             self.physics_engine.update()
-            self.player.center_x = SCREEN_WIDTH / 2 + self.view_left
-            self.player.center_y = SCREEN_HEIGHT / 2 + self.view_bottom
+            self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
+            self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
             return
 
         self.view_left -= self.move_x
