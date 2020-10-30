@@ -223,10 +223,10 @@ class GameCharacter(arcade.Sprite):
         #    RIGHT_FACING: [self.left + (CHARACTER_RESOLUTION * CHARACTER_SCALING), self.bottom],
         #}
         self.switch_action = {
-            DOWN_FACING:  [self.left, self.bottom - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 32],
-            UP_FACING:    [self.left, self.top + 32],
-            LEFT_FACING:  [self.left - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 32, self.bottom],
-            RIGHT_FACING: [self.right + 32, self.bottom],
+            DOWN_FACING:  [self.left, self.bottom - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 16],
+            UP_FACING:    [self.left, self.top + 16],
+            LEFT_FACING:  [self.left - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 16, self.bottom],
+            RIGHT_FACING: [self.right + 16, self.bottom],
         }
         self.action_sprite.left   = self.switch_action.get(self.character_face_direction)[0]
         self.action_sprite.bottom = self.switch_action.get(self.character_face_direction)[1]

@@ -25,8 +25,8 @@
    <properties>
     <property name="basepath" value="pipoya/SampleMap/"/>
     <property name="mapname" value="samplemap"/>
-    <property name="warp_x" value="436"/>
-    <property name="warp_y" value="1600"/>
+    <property name="warp_x" value="868"/>
+    <property name="warp_y" value="3200"/>
    </properties>
   </object>
  </objectgroup>
