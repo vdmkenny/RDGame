@@ -34,6 +34,7 @@
   <object id="11" name="shopkeeper" gid="1558" x="208" y="288" width="32" height="64">
    <properties>
     <property name="display_name" value="Goro the Blacksmith"/>
+    <property name="movement" value="wander"/>
     <property name="sprite" value="1"/>
     <property name="text" value="I'm the weapons shop keeper!"/>
     <property name="type" value="npc"/>

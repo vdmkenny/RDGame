@@ -1,9 +1,14 @@
+import threading
+import time
+import random
+
 import arcade
 
 MAIN_PATH="images/sprites/"
 CHARACTER_SCALING = 2
 CHARACTER_RESOLUTION = 32
 UPDATES_PER_FRAME = 10
+MOVEMENT_SPEED = 1
 
 #Facing constants
 DOWN_FACING = 0
@@ -15,28 +20,6 @@ RIGHT_FACING = 3
 NERD = 0
 OLD_MAN = 1
 YOUNG_GIRL = 2
-
-def get_y_value(npc):
-    return npc.center_y
-
-def order_npc(npc_list):
-    if len(npc_list) <=1:
-        return npc_list
-
-    ordered_spritelist = arcade.SpriteList(use_spatial_hash=False)
-
-    ordered_list = []
-
-    for npc in npc_list:
-        ordered_list.append(npc)
-    print(len(ordered_list))
-
-    ordered_list.sort(key=get_y_value)
-
-    for npc in ordered_list:
-        ordered_spritelist.append(npc)
-
-    return ordered_spritelist
 
 def sort_spritelist(sprite_list, key=None):
     sprite_list.sprite_list = sorted(sprite_list.sprite_list, key=key, reverse=True)
@@ -147,13 +130,61 @@ def load_character_textures(filename, character, facing):
 
 
 class GameCharacter(arcade.Sprite):
-    def __init__(self, character):
+    def character_action(self):
+        while True:
+            action_dict = {
+                'rotate': self.set_facing,
+                'wander': self.set_moving,
+            }
+            action = action_dict.get(self.properties.get('movement', None), None)
+            if action:
+                action()
+            time.sleep(random.randint(2,10))
 
+
+    def set_facing(self, facing=None):
+        if facing==None:
+            facing = random.randint(0,3)
+
+        if 0 <= facing <= 3:
+            self.character_face_direction = facing
+        else:
+            self.character_face_direction = DOWN_FACING
+
+    def set_moving(self, direction=None):
+        if not direction:
+            direction = random.randint(0,3)
+
+        self.character_moving = True
+        self.set_facing(facing=direction)
+
+        if direction == DOWN_FACING:
+            self.change_x = 0
+            self.change_y = -MOVEMENT_SPEED
+        elif direction == UP_FACING:
+            self.change_x = 0
+            self.change_y = MOVEMENT_SPEED
+        elif direction == LEFT_FACING:
+            self.change_x = -MOVEMENT_SPEED
+            self.change_y = 0
+        elif direction == RIGHT_FACING:
+            self.change_x = MOVEMENT_SPEED
+            self.change_y = 0
+           
+        time.sleep(random.randint(0,1))
+        self.character_moving = False
+        self.change_x = 0
+        self.change_y = 0
+
+
+    def __init__(self, character, properties={}):
         # Set up parent class
         super().__init__()
 
-        # Default to face-down
-        self.character_face_direction = DOWN_FACING
+        self.properties=properties
+        self.timer = threading.Timer(random.randint(0,3), self.character_action)
+        self.timer.start()
+
         self.character_moving = False
 
         # Select character model
@@ -181,6 +212,9 @@ class GameCharacter(arcade.Sprite):
             LEFT_FACING: self.textures_left,
             RIGHT_FACING: self.textures_right,
         }
+
+        # Default to face-down
+        self.character_face_direction = int(self.properties.get('facing', DOWN_FACING))
 
         # Default texture
         self.texture = self.textures_down[0]
@@ -212,6 +246,14 @@ class GameCharacter(arcade.Sprite):
                          [(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2),-(CHARACTER_RESOLUTION // CHARACTER_SCALING)], 
                          [-(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2),-(CHARACTER_RESOLUTION // CHARACTER_SCALING)]
                          ])
+        
+
+    def check_for_collision(self, game):
+        collision_list = game.activemap.map_dict.get('collision_layers', arcade.SpriteList())
+        if self.collides_with_list(collision_list):
+            self.character_moving=False
+            self.center_x -= self.change_x
+            self.center_y -= self.change_y
 
 
     def update_animation(self, delta_time: float = 1/60):
@@ -228,8 +270,8 @@ class GameCharacter(arcade.Sprite):
             LEFT_FACING:  [self.left - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 16, self.bottom],
             RIGHT_FACING: [self.right + 16, self.bottom],
         }
-        self.action_sprite.left   = self.switch_action.get(self.character_face_direction)[0]
-        self.action_sprite.bottom = self.switch_action.get(self.character_face_direction)[1]
+        self.action_sprite.left   = self.switch_action.get(int(self.character_face_direction))[0]
+        self.action_sprite.bottom = self.switch_action.get(int(self.character_face_direction))[1]
 
         # Idle animation
         if not self.character_moving:
@@ -263,3 +305,4 @@ class GameCharacter(arcade.Sprite):
             game.dialog.setMessage(name=interactions[0].properties.get('display_name', None),
                                    message=[interactions[0].properties.get('text', "")
                                        ])
+

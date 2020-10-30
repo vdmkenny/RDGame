@@ -34,6 +34,7 @@
   <object id="8" name="shopkeeper" gid="1558" x="414.265" y="287.77" width="32" height="64">
    <properties>
     <property name="display_name" value="Farah the Witch"/>
+    <property name="movement" value="wander"/>
     <property name="sprite" value="3"/>
     <property name="text" value="mmmyes?"/>
     <property name="type" value="npc"/>

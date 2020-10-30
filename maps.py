@@ -8,8 +8,7 @@ def create_npc_layer(npc_layer):
     npc_rendered = arcade.SpriteList()
     for npc in npc_layer:
         character_sprite = int(npc.properties.get('sprite'))
-        npc_character = character.GameCharacter(character_sprite)
-        npc_character.properties = npc.properties
+        npc_character = character.GameCharacter(character_sprite, npc.properties)
         npc_character.center_x = npc.center_x
         npc_character.center_y = npc.center_y
         npc_rendered.append(npc_character)

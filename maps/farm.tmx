@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="8">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="11">
  <tileset firstgid="1" source="../pipoya/SampleMap/[A]Grass_pipo.tsx"/>
  <tileset firstgid="529" source="../pipoya/SampleMap/[Base]BaseChip_pipo.tsx"/>
  <layer id="1" name="ground" width="20" height="20">
@@ -9,7 +9,7 @@
  </layer>
  <layer id="5" name="building" width="20" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjYBgF1AL1zORhfOZVkYjpbR4IcLEyMDSwQtg8QJqbFaHmCQsE1wPF6liJM49Y0ECCefeAbnjAgqkmixWVT4x5T4HmPAPiFywQNj5ArPtg5iGDbKjbeoF0Hytp7nsHxB9wuG8q0KxpJJhHCqC3efjyE6n5rRJHHoABbHLVZPhpOAEAjXY7Nw==
+   eJxjYBgF1AL1zORhfOZVkYjpbR4IcLEyMDSwQtg8QJqbFaHmCQsE1wPF6liJM49Y0ECCefeAbnjAgqkmixWVT4x5T4HmPAPiF1jMw+cGfHLYzMuGuq0XSPexkua+d0D8gQXCRgdTgWZNI8E8UgC9zcOXn0jNb5U48gAMYJOrJsNPwwkAANJNOk4=
   </data>
  </layer>
  <layer id="4" name="building_up" width="20" height="20">
@@ -27,6 +27,18 @@
     <property name="mapname" value="samplemap"/>
     <property name="warp_x" value="868"/>
     <property name="warp_y" value="3200"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="npc" opacity="0.52">
+  <object id="8" name="shopkeeper" gid="1558" x="256" y="343" width="32" height="64">
+   <properties>
+    <property name="display_name" value="Yuri the Farmer"/>
+    <property name="facing" type="int" value="2"/>
+    <property name="movement" value="none"/>
+    <property name="sprite" value="0"/>
+    <property name="text" value="Leave me alone, I'm eating some cheese!"/>
+    <property name="type" value="npc"/>
    </properties>
   </object>
  </objectgroup>

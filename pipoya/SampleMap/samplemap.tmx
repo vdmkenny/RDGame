@@ -601,25 +601,30 @@
   </object>
  </objectgroup>
  <objectgroup id="16" name="npc" opacity="0.32">
-  <object id="28" name="villager" gid="1606" x="333.333" y="360.667" width="32" height="64">
+  <object id="28" name="villager" gid="1606" x="465" y="406.333" width="32" height="64">
    <properties>
     <property name="display_name" value="Villager"/>
+    <property name="facing" type="int" value="1"/>
+    <property name="movement" value="rotate"/>
     <property name="sprite" value="2"/>
-    <property name="text" value="Oh, hi!"/>
+    <property name="text" value="Working on the farm is hard work, but it's rewarding!"/>
     <property name="type" value="npc"/>
    </properties>
   </object>
   <object id="30" name="villager" gid="1606" x="1046.67" y="969.333" width="32" height="64">
    <properties>
     <property name="display_name" value="Villager"/>
+    <property name="facing" value="3"/>
+    <property name="movement" value="wander"/>
     <property name="sprite" value="1"/>
     <property name="text" value="Oh, hi!"/>
     <property name="type" value="npc"/>
    </properties>
   </object>
-  <object id="31" name="villager" gid="1606" x="1346.67" y="834" width="32" height="64">
+  <object id="31" name="villager" gid="1606" x="1187.67" y="908" width="32" height="64">
    <properties>
     <property name="display_name" value="Villager"/>
+    <property name="movement" value="wander"/>
     <property name="sprite" value="2"/>
     <property name="text" value="Oh, hi!"/>
     <property name="type" value="npc"/>
