@@ -2,7 +2,7 @@ import arcade
 
 import character
 
-TILE_SCALING=1
+TILE_SCALING=2
 
 def create_npc_layer(npc_layer):
     npc_rendered = arcade.SpriteList()

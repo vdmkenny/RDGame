@@ -84,7 +84,7 @@ class GameView(arcade.View):
 
 
     def setup(self):
-        self.player = character.GameCharacter(2)
+        self.player = character.GameCharacter(3)
 
         self.activemap = maps.GameMap(mapname=self.default_map, basepath=self.default_map_dir)
         self.activemap.LoadMap(self)
@@ -155,30 +155,24 @@ class GameView(arcade.View):
     def on_draw(self):
         arcade.start_render()
 
-        self.activemap.map_dict.get("ground_layers").draw()
-        self.activemap.map_dict.get("collision_layers").draw()
-        self.activemap.map_dict.get("bridge_layers").draw()
+        self.activemap.map_dict.get("ground_layers").draw(filter=gl.GL_NEAREST)
+        self.activemap.map_dict.get("collision_layers").draw(filter=gl.GL_NEAREST)
+        self.activemap.map_dict.get("bridge_layers").draw(filter=gl.GL_NEAREST)
         #self.player.draw()
 
         self.active_characters.draw(filter=gl.GL_NEAREST)
 
-        self.activemap.map_dict.get("top_layers").draw()
+        self.activemap.map_dict.get("top_layers").draw(filter=gl.GL_NEAREST)
 
         self.dialog.draw()
-
-        #self.player.action_sprite.draw()
 
 
     def update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
-#        self.player.update()
-#        self.player.update_animation()
 
         character.sort_spritelist(self.active_characters, key=lambda x: x.center_y)
         self.active_characters.update()
         self.active_characters.update_animation()
-
-
         self.dialog.update(self)
 
         if self.player.character_moving:
@@ -194,17 +188,18 @@ class GameView(arcade.View):
                         warps[0].properties.get('warp_y', 0))
             return
 
-        if self.player.collides_with_list(self.activemap.map_dict.get("npc_layer")):
-            self.physics_engine.update()
-            self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
-            self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
-            return
+        for char in self.active_characters:
+            if char.collides_with_list(self.active_characters):
+                self.physics_engine.update()
+                self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
+                self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
+                return
         
-        if self.player.collides_with_list(self.activemap.map_dict.get("collision_layers")):
-            self.physics_engine.update()
-            self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
-            self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
-            return
+            if char.collides_with_list(self.activemap.map_dict.get("collision_layers")):
+                self.physics_engine.update()
+                self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
+                self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
+                return
 
         self.view_left -= self.move_x
         self.view_bottom -= self.move_y

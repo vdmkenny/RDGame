@@ -604,7 +604,7 @@
   <object id="28" name="villager" gid="1606" x="333.333" y="360.667" width="32" height="64">
    <properties>
     <property name="display_name" value="Villager"/>
-    <property name="sprite" value="0"/>
+    <property name="sprite" value="2"/>
     <property name="text" value="Oh, hi!"/>
     <property name="type" value="npc"/>
    </properties>

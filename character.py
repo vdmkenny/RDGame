@@ -1,7 +1,7 @@
 import arcade
 
 MAIN_PATH="images/sprites/"
-CHARACTER_SCALING = 1
+CHARACTER_SCALING = 2
 CHARACTER_RESOLUTION = 32
 UPDATES_PER_FRAME = 10
 
@@ -194,28 +194,39 @@ class GameCharacter(arcade.Sprite):
                          ])
 
         # Action Sprite is used for interactions with the world
-        self.action_sprite = arcade.Sprite(image_width=CHARACTER_RESOLUTION,
-                                           image_height=CHARACTER_RESOLUTION)
+        #self.action_sprite = arcade.Sprite(image_width=CHARACTER_RESOLUTION ,
+        #                                   image_height=CHARACTER_RESOLUTION)
+        
+        self.action_sprite = arcade.Sprite()
+                                           
 
         self.action_sprite.alpha = 128
         self.action_sprite.color = arcade.color.RED
         self.action_sprite.scale = CHARACTER_SCALING
         self.action_sprite.texture   = load_character_textures(f"{MAIN_PATH}/spritemap.png", self.character, DOWN_FACING)[0]
+        self.action_sprite.width = CHARACTER_RESOLUTION * CHARACTER_SCALING
+        self.action_sprite.height = CHARACTER_RESOLUTION * CHARACTER_SCALING
         self.action_sprite.set_hit_box([
-                         [-(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION // 2)],
-                         [(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION // 2)], 
-                         [(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION)], 
-                         [-(CHARACTER_RESOLUTION // 2),-(CHARACTER_RESOLUTION)]
+                         [-(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2),-(CHARACTER_RESOLUTION // CHARACTER_SCALING// 2)],
+                         [(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2),-(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2)], 
+                         [(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2),-(CHARACTER_RESOLUTION // CHARACTER_SCALING)], 
+                         [-(CHARACTER_RESOLUTION // CHARACTER_SCALING // 2),-(CHARACTER_RESOLUTION // CHARACTER_SCALING)]
                          ])
 
 
     def update_animation(self, delta_time: float = 1/60):
         # Position action sprite
+        #self.switch_action = {
+        #    DOWN_FACING:  [self.left, self.bottom - (CHARACTER_RESOLUTION * CHARACTER_SCALING)],
+        #    UP_FACING:    [self.left, self.bottom + (CHARACTER_RESOLUTION * CHARACTER_SCALING)],
+        #    LEFT_FACING:  [self.left - (CHARACTER_RESOLUTION * CHARACTER_SCALING), self.bottom],
+        #    RIGHT_FACING: [self.left + (CHARACTER_RESOLUTION * CHARACTER_SCALING), self.bottom],
+        #}
         self.switch_action = {
-            DOWN_FACING:  [self.left, self.bottom - CHARACTER_RESOLUTION],
-            UP_FACING:    [self.left, self.bottom + CHARACTER_RESOLUTION],
-            LEFT_FACING:  [self.left - CHARACTER_RESOLUTION, self.bottom],
-            RIGHT_FACING: [self.left + CHARACTER_RESOLUTION, self.bottom],
+            DOWN_FACING:  [self.left, self.bottom - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 32],
+            UP_FACING:    [self.left, self.top + 32],
+            LEFT_FACING:  [self.left - (CHARACTER_RESOLUTION // CHARACTER_SCALING) - 32, self.bottom],
+            RIGHT_FACING: [self.right + 32, self.bottom],
         }
         self.action_sprite.left   = self.switch_action.get(self.character_face_direction)[0]
         self.action_sprite.bottom = self.switch_action.get(self.character_face_direction)[1]
@@ -236,8 +247,17 @@ class GameCharacter(arcade.Sprite):
         self.cur_texture += 1
 
     def interact(self, game):
-#        interactions = self.action_sprite.collides_with_list(game.activemap.map_dict.get("npc_layer"))    
+        #TODO: make this less shitcode
         interactions = self.action_sprite.collides_with_list(game.active_characters)    
+        if interactions:
+            switch_face = {
+                DOWN_FACING:  UP_FACING,
+                UP_FACING:    DOWN_FACING,
+                LEFT_FACING:  RIGHT_FACING,
+                RIGHT_FACING: LEFT_FACING,
+            }
+            interactions[0].character_face_direction =  switch_face.get(self.character_face_direction)
+
         interactions += self.action_sprite.collides_with_list(game.activemap.map_dict.get("message_layer"))
         if interactions:
             game.dialog.setMessage(name=interactions[0].properties.get('display_name', None),

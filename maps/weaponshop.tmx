@@ -25,13 +25,13 @@
    <properties>
     <property name="basepath" value="pipoya/SampleMap/"/>
     <property name="mapname" value="samplemap"/>
-    <property name="warp_x" value="976.00"/>
-    <property name="warp_y" value="1100"/>
+    <property name="warp_x" value="488"/>
+    <property name="warp_y" value="550"/>
    </properties>
   </object>
  </objectgroup>
  <objectgroup id="7" name="npc">
-  <object id="11" name="shopkeeper" gid="1558" x="208" y="289" width="32" height="64">
+  <object id="11" name="shopkeeper" gid="1558" x="208" y="288" width="32" height="64">
    <properties>
     <property name="display_name" value="Goro the Blacksmith"/>
     <property name="sprite" value="1"/>
