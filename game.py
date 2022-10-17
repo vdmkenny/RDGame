@@ -170,7 +170,7 @@ class GameView(arcade.View):
 
         self.dialog.draw()
 
-        self.player.draw_hit_box()
+#        self.player.draw_hit_box()
 
 
     def update(self, delta_time):
