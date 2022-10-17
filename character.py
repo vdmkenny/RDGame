@@ -22,11 +22,7 @@ OLD_MAN = 1
 YOUNG_GIRL = 2
 
 def sort_spritelist(sprite_list, key=None):
-#    sprite_list.sprite_list = sorted(sprite_list.sprite_list, key=key, reverse=True)
     sprite_list.sort(key=lambda x: x.position[1], reverse=True)
-#    for idx, sprite in enumerate(sprite_list.sprite_list):
-#        sprite_list.sprite_idx[sprite] = idx
-#    sprite_list._vao1 = None
 
 
 def load_character_textures(filename, character, facing):

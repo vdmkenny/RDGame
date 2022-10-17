@@ -33,17 +33,7 @@ class GameMap():
         full_map_name = f'{basepath}{mapname}.tmx'
         #tmx_map = arcade.tilemap.read_tmx(full_map_name)
 
-        layer_options = {
-            "ground": {"use_spatial_hash": False},
-            "grass": {"use_spatial_hash": False},
-            "farm": {"use_spatial_hash": True},
-            "farm_up": {"use_spatial_hash": False},
-            "water": {"use_spatial_hash": True},
-            "water_grass": {"use_spatial_hash": False},
-            "building": {"use_spatial_hash": True},
-            "building_up": {"use_spatial_hash": False},
-            "building_tree": {"use_spatial_hash": True},
-        }
+        layer_options = {}
 
         self.tile_map = arcade.load_tilemap(full_map_name, TILE_SCALING, layer_options)
 

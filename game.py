@@ -1,3 +1,5 @@
+#!/bin/python
+
 import arcade
 from OpenGL import GL as gl
 
@@ -200,7 +202,7 @@ class GameView(arcade.View):
         
         #if self.player.collides_with_list(self.activemap.map_dict.get("collision_layers")):
             if char.collides_with_list(self.activemap.map_dict.get("collision_layers")):
-                char.check_for_collision(self)
+                #char.check_for_collision(self)
                 self.physics_engine.update()
                 self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
                 self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
