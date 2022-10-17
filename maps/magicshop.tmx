@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="9">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="9">
  <tileset firstgid="1" source="../pipoya/SampleMap/[A]Grass_pipo.tsx"/>
  <tileset firstgid="529" source="../pipoya/SampleMap/[Base]BaseChip_pipo.tsx"/>
  <layer id="1" name="ground" width="20" height="20">

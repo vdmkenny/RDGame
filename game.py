@@ -68,8 +68,11 @@ class GameView(arcade.View):
         self.player = None
         self.physics_engine = None
 
-        self.default_map_dir = "pipoya/SampleMap/"
-        self.default_map = "samplemap"
+        #self.default_map_dir = "pipoya/SampleMap/"
+        #self.default_map = "samplemap"
+
+        self.default_map_dir = "maps/"
+        self.default_map = "magicshop"
 
         self.activemap = None
         self.active_characters = arcade.SpriteList()

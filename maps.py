@@ -31,7 +31,22 @@ class GameMap():
         self.map_dict = {}
 
         full_map_name = f'{basepath}{mapname}.tmx'
-        tmx_map = arcade.tilemap.read_tmx(full_map_name)
+        layer_options = {}
+        #tmx_map = arcade.tilemap.read_tmx(full_map_name)
+
+      #  layer_options = {
+      #      "ground": {"use_spatial_hash": False},
+      #      "grass": {"use_spatial_hash": False},
+      #      "farm": {"use_spatial_hash": False},
+      #      "farm_up": {"use_spatial_hash": False},
+      #      "water": {"use_spatial_hash": True},
+      #      "water_grass": {"use_spatial_hash": True},
+      #      "building": {"use_spatial_hash": True},
+      #      "building_up": {"use_spatial_hash": True},
+      #      "building_tree": {"use_spatial_hash": True},
+      #  }
+
+        self.tile_map = arcade.load_tilemap(full_map_name, TILE_SCALING, layer_options)
 
         # Define different types of map layers
         ground_list = ["ground", "grass"]
@@ -41,54 +56,57 @@ class GameMap():
 
 
         for layer in ground_list:
-            self.ground_layers.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING))
+            maplayer = self.tile_map.sprite_lists.get(layer)
+            if maplayer:
+                self.ground_layers.extend(maplayer)
         for layer in collision_list:
-            self.collision_layers.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING,
-                                                      use_spatial_hash=True))
+            maplayer = self.tile_map.sprite_lists.get(layer)
+            if maplayer:
+                self.collision_layers.extend(maplayer)
         for layer in bridge_list:
-            self.bridge_layers.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING))
+            maplayer = self.tile_map.sprite_lists.get(layer)
+            if maplayer:
+                self.bridge_layers.extend(maplayer)
         for layer in top_list:
-            self.top_layers.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                      layer_name=layer,
-                                                      scaling=TILE_SCALING))
-        self.warp_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                  layer_name="warp",
-                                                  scaling=TILE_SCALING))
-        self.spawn_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                  layer_name="spawn",
-                                                  scaling=TILE_SCALING))
-        self.npc_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                  layer_name="npc",
-                                                  scaling=TILE_SCALING,
-                                                  use_spatial_hash=True))
+            maplayer = self.tile_map.sprite_lists.get(layer)
+            if maplayer:
+                self.top_layers.extend(maplayer)
+
+
+        maplayer = self.tile_map.sprite_lists.get("warp")
+        if maplayer:
+                self.warp_layer.extend(maplayer)
+
+        maplayer = self.tile_map.sprite_lists.get("spawn")
+        if maplayer:
+                self.spawn_layer.extend(maplayer)
+
+        maplayer = self.tile_map.sprite_lists.get("npc")
+        if maplayer:
+                self.npc_layer.extend(maplayer)
 
         ncp_rendered = create_npc_layer(npc_layer=self.npc_layer)
 
+        maplayer = self.tile_map.sprite_lists.get("message")
+        if maplayer:
+                self.message_layer.extend(maplayer)
 
-        self.message_layer.extend(arcade.tilemap.process_layer(map_object=tmx_map,
-                                                  layer_name="message",
-                                                  scaling=TILE_SCALING))
 
         if custom_spawn:
             self.spawnpoint = custom_spawn
         else:
             self.spawnpoint = [self.spawn_layer[0].center_x, self.spawn_layer[0].center_y]
 
-        self.map_dict.update({'ground_layers': 	self.ground_layers,
-			'collision_layers': 	self.collision_layers,
-			'bridge_layers': 	self.bridge_layers,
-			'top_layers': 		self.top_layers,
-			'warp_layer': 		self.warp_layer,
-			'npc_layer': 		create_npc_layer(npc_layer=self.npc_layer),
-			'message_layer':	self.message_layer,
-			'spawn':		self.spawnpoint,
-			})
+        self.map_dict.update({
+            'ground_layers': self.ground_layers,
+            'collision_layers': self.collision_layers,
+            'bridge_layers': self.bridge_layers,
+            'top_layers': self.top_layers,
+            'warp_layer': self.warp_layer,
+            'npc_layer': create_npc_layer(npc_layer=self.npc_layer),
+            'message_layer': self.message_layer,
+            'spawn': self.spawnpoint,
+  		})
 
     def LoadMap(self, game):
 
