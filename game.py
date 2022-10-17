@@ -72,7 +72,7 @@ class GameView(arcade.View):
         #self.default_map = "samplemap"
 
         self.default_map_dir = "maps/"
-        self.default_map = "magicshop"
+        self.default_map = "emptyfield"
 
         self.activemap = None
         self.active_characters = arcade.SpriteList()
@@ -205,6 +205,9 @@ class GameView(arcade.View):
                 self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
                 self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
                 return
+
+        self.player.center_x = SCREEN_WIDTH // 2 + self.view_left
+        self.player.center_y = SCREEN_HEIGHT // 2 + self.view_bottom
 
         self.view_left -= self.move_x
         self.view_bottom -= self.move_y

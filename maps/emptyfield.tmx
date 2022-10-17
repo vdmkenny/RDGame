@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="5">
+ <tileset firstgid="1" source="../pipoya/SampleMap/[A]Flower_pipo.tsx"/>
+ <tileset firstgid="97" source="../pipoya/SampleMap/[A]Grass_pipo.tsx"/>
+ <tileset firstgid="625" name="[Base]BaseChip_pipo" tilewidth="32" tileheight="32" tilecount="1064" columns="8">
+  <image source="../pipoya/SampleMap/[Base]BaseChip_pipo.png" width="256" height="4256"/>
+ </tileset>
+ <tileset firstgid="1689" source="../pipoya/SampleMap/[Base]BaseChip_pipo.tsx"/>
+ <layer id="1" name="grass" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJyTZ2JgkB/Fo5hIPJsNN8YlT6nZA+3nUTyKRzF2DABndDyR
+  </data>
+ </layer>
+ <layer id="3" name="water_grass" width="20" height="20">
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFowAB7rDRV99wB6PhMgqGMwAAw8UCpw==
+  </data>
+ </layer>
+ <objectgroup id="2" name="spawn">
+  <object id="1" name="spawn" class="spawn" gid="1654" x="288.554" y="374.946" width="32" height="32"/>
+ </objectgroup>
+ <objectgroup id="4" name="warp">
+  <object id="2" name="overworld_weaponshop" class="warp" gid="1654" x="191.69" y="254.326" width="32" height="53.3333">
+   <properties>
+    <property name="mapname" value="weaponshop"/>
+   </properties>
+  </object>
+  <object id="3" name="overworld_magicshop" class="warp" gid="1654" x="384.545" y="218.547" width="32" height="53.3333">
+   <properties>
+    <property name="mapname" value="magicshop"/>
+   </properties>
+  </object>
+  <object id="4" name="overworld_farm" class="warp" gid="1654" x="513.697" y="351.19" width="32" height="53.3333">
+   <properties>
+    <property name="mapname" value="farm"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
